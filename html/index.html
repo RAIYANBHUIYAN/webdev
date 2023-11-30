@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garbage Level Monitor</title>
+</head>
+<body>
+
+  <h1 id="garbageLevel">Loading...</h1>
+
+  <script>
+    // Function to update garbage level
+    function updateGarbageLevel() {
+      // Make an AJAX request to the ESP8266 server
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          // Extract the garbage level from the response
+          var garbageLevel = this.responseText.match(/<h1 id='garbageLevel'>(.*?)<\/h1>/)[1];
+          // Update the HTML element with the new garbage level
+          document.getElementById("garbageLevel").innerHTML = garbageLevel;
+        }
+      };
+      xhttp.open("GET", "/update", true);
+      xhttp.send();
+    }
+
+    // Update garbage level every 5 seconds
+    setInterval(updateGarbageLevel, 5000);
+
+    // Initial update when the page loads
+    updateGarbageLevel();
+  </script>
+
+</body>
+</html>
